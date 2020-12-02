@@ -46,7 +46,12 @@ func editPeople(ctx context.Context, client clientGRPCJsonXml.RPCServiceClient, 
 		log.Fatalf("%v.CloseAndRecv() got error %v, want %v", stream, err, nil)
 	}
 	var response clientGRPCJsonXml.ResponseEdit
-	_ = xml.Unmarshal([]byte(*reply.Payload), &response)
+	response.Result = true
+	err = xml.Unmarshal([]byte(*reply.Payload), &response)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 	if response.Result {
 		fmt.Println("People edited successfully")
 	} else {
@@ -114,7 +119,7 @@ func getPeopleById(ctx context.Context, client clientGRPCJsonXml.RPCServiceClien
 func main() {
 	var conn *grpc.ClientConn
 	ctx := context.Background()
-	conn, err := grpc.Dial("10.8.0.1:50051", grpc.WithInsecure())
+	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %s", err)
 	}
