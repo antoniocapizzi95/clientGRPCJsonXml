@@ -96,7 +96,7 @@ func getPeopleById(ctx context.Context, client clientGRPCJsonXml.RPCServiceClien
 			}
 			var person clientGRPCJsonXml.Person
 			_ = json.Unmarshal([]byte(*in.Payload), &person)
-			log.Printf("Got person %s", person.Name)
+			fmt.Println("Person: " + person.Name)
 		}
 	}()
 	for _, id := range ids {
